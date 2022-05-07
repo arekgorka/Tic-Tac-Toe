@@ -10,12 +10,15 @@ javafx {
 
 group 'com.kodilla'
 version '1.0-SNAPSHOT'
-mainClassName = 'com.kodilla.blackjack.BlackJack'
+mainClassName = 'com.tictactoe.TicTacToeApplication'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.2'
+    implementation 'org.testng:testng:7.5'
 }
