@@ -7,6 +7,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.awt.event.ActionEvent;
@@ -45,12 +46,13 @@ public class TicTacToeApplication extends Application {
                             actions.checkIfItsEnd();
                             if (actions.getCounterMove() < 9 && !actions.playerWin) {
                                 actions.computerMove();
-                                actions.addCounterMove();
                                 actions.checkIfItsEnd();
                             }
                         }
                     }
+                    actions.endSetting();
                 });
+
                 actions.buttonList.add(button);
             }
         }
@@ -58,5 +60,4 @@ public class TicTacToeApplication extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
 }
