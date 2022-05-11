@@ -3,8 +3,11 @@ package com.tictactoe;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
@@ -28,20 +31,25 @@ public class TicTacToeApplication extends Application {
         GridPane grid = new GridPane();
 
         //set size of text
-        /* Text textX = new Text("X");
-        textX.setFont(Font.font(72));*/
 
-        Scene scene = new Scene(grid,450,450);
+
+        Scene scene = new Scene(grid,450,450, Color.DARKSEAGREEN); //czemu nie działa kolor?
         primaryStage.setResizable(false);
+
+
         for (int i=0; i<3; i++) {
             for (int n=0; n<3; n++) {
                 Button button = new Button();
+                button.setBackground(Background.fill(Color.GRAY));
+                button.setBorder(Border.stroke(Color.BLACK));
                 button.setPrefSize(150,150);
                 grid.add(button,i,n,1,1);
                 button.setOnMouseClicked(event -> {
                     if (!actions.isPlayerWin() && !actions.isComputerWin()) {
                         if (button.getText().isEmpty()) {
+                            button.setBackground(Background.fill(Color.DARKSEAGREEN));
                             button.setText("X");
+                            button.setStyle("-fx-font-size: 60");
                             actions.addCounterMove();
                             actions.checkIfItsEnd();
                             if (actions.getCounterMove() < 9 && !actions.playerWin) {
@@ -56,6 +64,10 @@ public class TicTacToeApplication extends Application {
                 actions.buttonList.add(button);
             }
         }
+        /*HBox layoutHBox = new HBox();
+        grid.add(layoutHBox,0,3,1,3);
+        layoutHBox.*/
+        //label w HBox
         primaryStage.setTitle("TicTacToe");
         primaryStage.setScene(scene);
         primaryStage.show();

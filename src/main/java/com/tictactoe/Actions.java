@@ -3,7 +3,9 @@ package com.tictactoe;
 import com.sun.security.jgss.GSSUtil;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
@@ -41,23 +43,13 @@ public class Actions {
             Button button = buttonList.get(random.nextInt(buttonList.size()-1));
             if (button.getText().equals("")) {
                 button.setText("O");
+                button.setStyle("-fx-font-size: 60");
+                button.setBackground(Background.fill(Color.DARKSALMON));
                 end = true;
                 counterMove++;
             }
         }
     }
-
-    /*public void setupListener() {
-        ActionListener listener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Click");
-            }
-        };
-        for (Button button: buttonList) {
-            button.addActionListener(listener);
-        }
-    }*/
 
     public void addCounterMove() {
         counterMove++;
@@ -79,9 +71,6 @@ public class Actions {
             playerWin = true;
             runWindowAfterGame();
             methodAfterYesOrNo();
-
-            //finished();
-
         }
         if (buttonList.get(0).getText().equals("O") && buttonList.get(1).getText().equals("O") && buttonList.get(2).getText().equals("O") ||
                 buttonList.get(3).getText().equals("O") && buttonList.get(4).getText().equals("O") && buttonList.get(5).getText().equals("O") ||
@@ -97,14 +86,11 @@ public class Actions {
             computerWin = true;
             runWindowAfterGame();
             methodAfterYesOrNo();
-            //finished();
         }
         if (counterMove == 9 && !playerWin && !computerWin) {
             System.out.println("REMIS");
             runWindowAfterGame();
             methodAfterYesOrNo();
-
-            //finished();
         }
     }
     public void methodAfterYesOrNo() {
@@ -112,7 +98,7 @@ public class Actions {
             newGame();
         }
         if (windowAfterGame.noAnswer) {
-
+            System.exit(0);
         }
     }
 
@@ -128,27 +114,11 @@ public class Actions {
         }
     }
 
-    /*public void setPopup() {
-        Text textPopup = new Text();
-        Popup popup = new Popup();
-        popup.setX(150);
-        popup.setY(150);
-
-        if (playerWin) {
-            textPopup.setText("Wygrałeś!!!");
-        }
-        if (computerWin) {
-            textPopup.setText("Przegrałeś :(");
-        }
-        if (!playerWin && !computerWin) {
-            textPopup.setText("REMIS");
-        }
-    }*/
-
     public void newGame() {
         counterMove = 0;
         for (Button button: buttonList) {
             button.setText("");
+            button.setBackground(Background.fill(Color.GRAY));
         }
         if (playerWin) {
             playerWin = false;
@@ -157,12 +127,6 @@ public class Actions {
             computerWin = false;
         }
     }
-
-    /*public void finished() {
-        for (Button button: buttonList) {
-            button.setOnMouseEntered(null);
-        }
-    }*/
 
     public void endSetting() {
         windowAfterGame.yesAnswer = false;

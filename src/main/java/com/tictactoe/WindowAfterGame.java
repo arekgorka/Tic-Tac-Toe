@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 
 public class WindowAfterGame {
 
-    static Actions actions = new Actions();
     static boolean yesAnswer = false;
     static boolean noAnswer = false;
 
@@ -19,6 +18,8 @@ public class WindowAfterGame {
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);
         window.setMinWidth(250);
+        window.setMinHeight(200);
+        window.setResizable(false);
         Label label = new Label();
         label.setText(message);
 
