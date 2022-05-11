@@ -1,8 +1,10 @@
 package com.tictactoe;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -13,6 +15,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -30,12 +33,12 @@ public class TicTacToeApplication extends Application {
 
         GridPane grid = new GridPane();
 
-        //set size of text
-
-
-        Scene scene = new Scene(grid,450,450, Color.DARKSEAGREEN); //czemu nie działa kolor?
+        Scene scene = new Scene(grid,450,600);
         primaryStage.setResizable(false);
 
+        Label initialLabel = new Label();
+        initialLabel.setText("Player " + actions.getCounterPlayerWin() + " VS " + actions.getCounterComputerWin() + " Computer");
+        initialLabel.setStyle("-fx-font-size: 30");
 
         for (int i=0; i<3; i++) {
             for (int n=0; n<3; n++) {
@@ -59,15 +62,23 @@ public class TicTacToeApplication extends Application {
                         }
                     }
                     actions.endSetting();
+                    initialLabel.setText("Player " + actions.getCounterPlayerWin() + " VS " + actions.getCounterComputerWin() + " Computer");
                 });
 
                 actions.buttonList.add(button);
             }
         }
-        /*HBox layoutHBox = new HBox();
-        grid.add(layoutHBox,0,3,1,3);
-        layoutHBox.*/
-        //label w HBox
+
+
+        VBox layoutVBox = new VBox(10);
+        layoutVBox.setPrefSize(450,150);
+        layoutVBox.setBackground(Background.fill(Color.LIGHTGREY));
+        layoutVBox.setBorder(Border.stroke(Color.BLACK));
+        layoutVBox.setAlignment(Pos.CENTER);
+        grid.add(layoutVBox,0,3,3,1);
+
+        layoutVBox.getChildren().addAll(initialLabel);
+
         primaryStage.setTitle("TicTacToe");
         primaryStage.setScene(scene);
         primaryStage.show();

@@ -1,10 +1,14 @@
 package com.tictactoe;
 
 import com.sun.security.jgss.GSSUtil;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
@@ -33,6 +37,10 @@ public class Actions {
     int counterMove = 0;
     boolean playerWin = false;
     boolean computerWin = false;
+    int counterPlayerWin = 0;
+    int counterComputerWin = 0;
+
+
     WindowAfterGame windowAfterGame = new WindowAfterGame();
 
 
@@ -69,6 +77,7 @@ public class Actions {
                 buttonList.get(2).getText().equals("X") && buttonList.get(4).getText().equals("X") && buttonList.get(6).getText().equals("X")) {
             System.out.println("PLAYER WIN!!!");
             playerWin = true;
+            counterPlayerWin++;
             runWindowAfterGame();
             methodAfterYesOrNo();
         }
@@ -84,8 +93,10 @@ public class Actions {
                 buttonList.get(2).getText().equals("O") && buttonList.get(4).getText().equals("O") && buttonList.get(6).getText().equals("O")) {
             System.out.println("COMPUTER WIN!!!");
             computerWin = true;
+            counterComputerWin++;
             runWindowAfterGame();
             methodAfterYesOrNo();
+
         }
         if (counterMove == 9 && !playerWin && !computerWin) {
             System.out.println("REMIS");
@@ -116,6 +127,8 @@ public class Actions {
 
     public void newGame() {
         counterMove = 0;
+        //counterPlayerWin = 0;
+        //counterComputerWin = 0;
         for (Button button: buttonList) {
             button.setText("");
             button.setBackground(Background.fill(Color.GRAY));
@@ -136,13 +149,17 @@ public class Actions {
     public int getCounterMove() {
         return counterMove;
     }
-
     public boolean isPlayerWin() {
         return playerWin;
     }
-
     public boolean isComputerWin() {
         return computerWin;
+    }
+    public int getCounterPlayerWin() {
+        return counterPlayerWin;
+    }
+    public int getCounterComputerWin() {
+        return counterComputerWin;
     }
 
 }
