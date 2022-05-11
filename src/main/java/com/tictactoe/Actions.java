@@ -1,26 +1,12 @@
 package com.tictactoe;
 
-import com.sun.security.jgss.GSSUtil;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.stage.Popup;
-import javafx.stage.Stage;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
 
 public class Actions {
 
@@ -42,6 +28,8 @@ public class Actions {
 
 
     WindowAfterGame windowAfterGame = new WindowAfterGame();
+    WindowBeforeGame windowBeforeGame = new WindowBeforeGame();
+    WindowAfterRound windowAfterRound = new WindowAfterRound();
 
 
     public void computerMove() {
@@ -80,6 +68,8 @@ public class Actions {
             counterPlayerWin++;
             runWindowAfterGame();
             methodAfterYesOrNo();
+            runWindowAfterRound();
+            newRound();
         }
         if (buttonList.get(0).getText().equals("O") && buttonList.get(1).getText().equals("O") && buttonList.get(2).getText().equals("O") ||
                 buttonList.get(3).getText().equals("O") && buttonList.get(4).getText().equals("O") && buttonList.get(5).getText().equals("O") ||
@@ -96,12 +86,15 @@ public class Actions {
             counterComputerWin++;
             runWindowAfterGame();
             methodAfterYesOrNo();
-
+            runWindowAfterRound();
+            newRound();
         }
         if (counterMove == 9 && !playerWin && !computerWin) {
             System.out.println("REMIS");
             runWindowAfterGame();
             methodAfterYesOrNo();
+            runWindowAfterRound();
+            newRound();
         }
     }
     public void methodAfterYesOrNo() {
@@ -114,21 +107,36 @@ public class Actions {
     }
 
     public void runWindowAfterGame() {
-        if (playerWin) {
-            windowAfterGame.displayWindowAfterGame("Endgame window", "WIN!!! Play again?");
-        }
-        if (computerWin) {
-            windowAfterGame.displayWindowAfterGame("Endgame window", "You lose! Play again?");
-        }
-        if (!playerWin && !computerWin) {
-            windowAfterGame.displayWindowAfterGame("Endgame window", "Draw... Play again?");
+        if (windowBeforeGame.getAmountOfWinningRound() == counterPlayerWin ||
+                windowBeforeGame.getAmountOfWinningRound() == counterComputerWin) {
+            if (playerWin) {
+                windowAfterGame.displayWindowAfterGame("Endgame window", "WIN!!! Play again?");
+            }
+            if (computerWin) {
+                windowAfterGame.displayWindowAfterGame("Endgame window", "You lose! Play again?");
+            }
+            if (!playerWin && !computerWin) {
+                windowAfterGame.displayWindowAfterGame("Endgame window", "Draw... Play again?");
+            }
         }
     }
 
-    public void newGame() {
+    public void runWindowAfterRound() {
+        if (counterMove != 0) {
+            if (playerWin) {
+                windowAfterRound.displayWindowAfterRound("Endround window", "You win round!");
+            }
+            if (computerWin) {
+                windowAfterRound.displayWindowAfterRound("Endround window", "You lose round!");
+            }
+            if (!playerWin && !computerWin) {
+                windowAfterRound.displayWindowAfterRound("Endround window", "Draw...");
+            }
+        }
+    }
+
+    public void newRound() {
         counterMove = 0;
-        //counterPlayerWin = 0;
-        //counterComputerWin = 0;
         for (Button button: buttonList) {
             button.setText("");
             button.setBackground(Background.fill(Color.GRAY));
@@ -139,6 +147,12 @@ public class Actions {
         if (computerWin) {
             computerWin = false;
         }
+    }
+
+    public void newGame() {
+        counterPlayerWin = 0;
+        counterComputerWin = 0;
+        newRound();
     }
 
     public void endSetting() {
