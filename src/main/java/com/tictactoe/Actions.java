@@ -106,6 +106,10 @@ public class Actions {
         }
     }
 
+    public void runWindowBeforeGame() {
+        windowBeforeGame.displayWindowBeforeGame("Staring window","To how many victories do you wanna play?");
+    }
+
     public void runWindowAfterGame() {
         if (windowBeforeGame.getAmountOfWinningRound() == counterPlayerWin ||
                 windowBeforeGame.getAmountOfWinningRound() == counterComputerWin) {

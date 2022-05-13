@@ -82,5 +82,7 @@ public class TicTacToeApplication extends Application {
         primaryStage.setTitle("TicTacToe");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        actions.runWindowBeforeGame();
     }
 }
