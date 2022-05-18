@@ -2,6 +2,8 @@ package com.tictactoe;
 
 import com.sun.javafx.scene.control.InputField;
 import com.sun.javafx.scene.control.IntegerField;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -32,20 +34,35 @@ public class WindowBeforeGame {
         TextField textField = new TextField();
         textField.setMaxWidth(150);
 
+        textField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                System.out.println("change listener");
+                if (!newValue.matches("\\d*")) {
+                    textField.setText(newValue.replaceAll("[^\\d]",""));
+                }
+            }
+        });
+
         Button letsplayButton = new Button("Let's play!");
 
         letsplayButton.setOnAction(event -> {
-            if(textField.getText().isEmpty()) {
+            /*if(textField.getText().isEmpty()) {
                 textField.setText("Input integer!");
             } else {
-                try {
+                try {*/
                     int scannedAmount = Integer.parseInt(textField.getText());
-                    amountOfWinningRound = scannedAmount;
+                    if (scannedAmount > 0) {
+                        amountOfWinningRound = scannedAmount;
                     window.close();
+                    } /*else {
+                        textField.setStyle("-fx-border-color: red; -fx-border-width: 2px");
+                        textField.setText("positive integer!");
+                    }
                 } catch (NumberFormatException e) {
                     textField.setText("Input integer!");
                 }
-            }
+            }*/
         });
 
 
