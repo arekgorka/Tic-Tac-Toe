@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 public class WindowAfterRound {
 
-    public void displayWindowAfterRound(String title, String message) {
+    public static void displayWindowAfterRound(String title, String message) {
 
         Stage windowAfterRound = new Stage();
         windowAfterRound.initModality(Modality.APPLICATION_MODAL);
@@ -23,9 +23,7 @@ public class WindowAfterRound {
 
         Button okButton = new Button("OK");
 
-        okButton.setOnAction(event -> {
-            windowAfterRound.close();
-        });
+        okButton.setOnAction(event -> windowAfterRound.close());
 
         VBox layout = new VBox(10);
         layout.getChildren().addAll(label, okButton);

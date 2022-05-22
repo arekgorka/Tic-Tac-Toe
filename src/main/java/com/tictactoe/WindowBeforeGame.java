@@ -1,31 +1,39 @@
 package com.tictactoe;
 
-import com.sun.javafx.scene.control.InputField;
-import com.sun.javafx.scene.control.IntegerField;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.input.InputEvent;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.util.Scanner;
 
 public class WindowBeforeGame {
 
     static int amountOfWinningRound = 1;
+    static boolean easyMode = true;
+    static boolean mediumMode = false;
+    static boolean hardMode = false;
+
+    public static boolean isEasyMode() {
+        return easyMode;
+    }
+
+    public static boolean isMediumMode() {
+        return mediumMode;
+    }
+
+    public static boolean isHardMode() {
+        return hardMode;
+    }
 
     public static void displayWindowBeforeGame(String title, String message) {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);
         window.setMinWidth(350);
-        window.setMinHeight(150);
+        window.setMinHeight(350);
         window.setResizable(false);
         Label label = new Label();
         label.setText(message);
@@ -34,47 +42,71 @@ public class WindowBeforeGame {
         TextField textField = new TextField();
         textField.setMaxWidth(150);
 
-        textField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                System.out.println("change listener");
-                if (!newValue.matches("\\d*")) {
-                    textField.setText(newValue.replaceAll("[^\\d]",""));
-                }
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("change listener");
+            if (!newValue.matches("\\d*")) {
+                textField.setText(newValue.replaceAll("[^\\d]",""));
             }
         });
 
-        Button letsplayButton = new Button("Let's play!");
+        Button playButton = new Button("Let's play!");
 
-        letsplayButton.setOnAction(event -> {
-            /*if(textField.getText().isEmpty()) {
+        playButton.setOnAction(event -> {
+            if(textField.getText().isEmpty()) {
                 textField.setText("Input integer!");
             } else {
-                try {*/
+                try {
                     int scannedAmount = Integer.parseInt(textField.getText());
                     if (scannedAmount > 0) {
                         amountOfWinningRound = scannedAmount;
                     window.close();
-                    } /*else {
+                    } else {
                         textField.setStyle("-fx-border-color: red; -fx-border-width: 2px");
                         textField.setText("positive integer!");
                     }
                 } catch (NumberFormatException e) {
                     textField.setText("Input integer!");
                 }
-            }*/
+            }
         });
 
+        Button easyButton = new Button("Easy");
+        easyButton.setOnAction(event -> {
+            easyMode = true;
+            mediumMode = false;
+            hardMode = false;
+            System.out.println("pressed Easy Button");
+        });
+        Button mediumButton = new Button("Medium");
+        mediumButton.setOnAction(event -> {
+            easyMode = false;
+            mediumMode = true;
+            hardMode = false;
+            System.out.println("pressed Medium Button");
+        });
+        Button hardButton = new Button("Hard");
+        hardButton.setOnAction(event -> {
+            easyMode = false;
+            mediumMode = false;
+            hardMode = true;
+            System.out.println("pressed Hard Button");
+        });
+
+        HBox hBox = new HBox(10);
+        hBox.getChildren().addAll(easyButton,mediumButton,hardButton);
+        hBox.setAlignment(Pos.CENTER);
+
+        Label labelLevel = new Label("Select a level:");
 
         VBox layout = new VBox(10);
-        layout.getChildren().addAll(label, textField, letsplayButton);
+        layout.getChildren().addAll(label, textField, playButton, labelLevel, hBox);
         layout.setAlignment(Pos.CENTER);
         Scene scene = new Scene(layout);
         window.setScene(scene);
         window.showAndWait();
     }
 
-    public int getAmountOfWinningRound() {
+    public static int getAmountOfWinningRound() {
         return amountOfWinningRound;
     }
 }

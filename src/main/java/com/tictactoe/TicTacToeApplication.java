@@ -5,21 +5,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import static javafx.scene.input.MouseEvent.*;
 
 public class TicTacToeApplication extends Application {
 
@@ -55,9 +43,12 @@ public class TicTacToeApplication extends Application {
                             button.setStyle("-fx-font-size: 60");
                             actions.addCounterMove();
                             actions.checkIfItsEnd();
-                            if (actions.getCounterMove() < 9 && !actions.playerWin) {
+                            if (actions.getCounterMove() < 9 && !actions.playerWin && !actions.isNewGame) {
                                 actions.computerMove();
                                 actions.checkIfItsEnd();
+                            }
+                            if (actions.isNewGame) {
+                                actions.isNewGame = false;
                             }
                         }
                     }

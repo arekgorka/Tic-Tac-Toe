@@ -3,7 +3,6 @@ package com.tictactoe;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -15,7 +14,7 @@ public class Actions {
     //1 = button2
     //2 = button3
     //3 = button4
-    //4 = button5
+    //4 = button5 - middle
     //5 = button6
     //6 = button7
     //7 = button8
@@ -25,26 +24,20 @@ public class Actions {
     boolean computerWin = false;
     int counterPlayerWin = 0;
     int counterComputerWin = 0;
-
-
-    WindowAfterGame windowAfterGame = new WindowAfterGame();
-    WindowBeforeGame windowBeforeGame = new WindowBeforeGame();
-    WindowAfterRound windowAfterRound = new WindowAfterRound();
+    boolean isNewGame = false;
 
 
     public void computerMove() {
-        boolean end = false;
-        Random random = new Random();
-        while(!end && !windowAfterGame.yesAnswer) {
-            Button button = buttonList.get(random.nextInt(buttonList.size()-1));
-            if (button.getText().equals("")) {
-                button.setText("O");
-                button.setStyle("-fx-font-size: 60");
-                button.setBackground(Background.fill(Color.DARKSALMON));
-                end = true;
-                counterMove++;
-            }
+        if (WindowBeforeGame.isEasyMode()) {
+            computerEasyModeMove();
         }
+        if (WindowBeforeGame.isMediumMode()) {
+            computerMediumModeMove();
+        }
+        if (WindowBeforeGame.isHardMode()) {
+            computerHardModeMove();
+        }
+        counterMove++;
     }
 
     public void addCounterMove() {
@@ -90,7 +83,7 @@ public class Actions {
             newRound();
         }
         if (counterMove == 9 && !playerWin && !computerWin) {
-            System.out.println("REMIS");
+            System.out.println("DRAW");
             runWindowAfterGame();
             methodAfterYesOrNo();
             runWindowAfterRound();
@@ -98,29 +91,29 @@ public class Actions {
         }
     }
     public void methodAfterYesOrNo() {
-        if (windowAfterGame.yesAnswer) {
+        if (WindowAfterGame.yesAnswer) {
             newGame();
         }
-        if (windowAfterGame.noAnswer) {
+        if (WindowAfterGame.noAnswer) {
             System.exit(0);
         }
     }
 
     public void runWindowBeforeGame() {
-        windowBeforeGame.displayWindowBeforeGame("Staring window","To how many victories do you wanna play?");
+        WindowBeforeGame.displayWindowBeforeGame("Staring window","To how many victories do you want to play?");
     }
 
     public void runWindowAfterGame() {
-        if (windowBeforeGame.getAmountOfWinningRound() == counterPlayerWin ||
-                windowBeforeGame.getAmountOfWinningRound() == counterComputerWin) {
+        if (WindowBeforeGame.getAmountOfWinningRound() == counterPlayerWin ||
+                WindowBeforeGame.getAmountOfWinningRound() == counterComputerWin) {
             if (playerWin) {
-                windowAfterGame.displayWindowAfterGame("Endgame window", "WIN!!! Play again?");
+                WindowAfterGame.displayWindowAfterGame("Endgame window", "WIN!!! Play again?");
             }
             if (computerWin) {
-                windowAfterGame.displayWindowAfterGame("Endgame window", "You lose! Play again?");
+                WindowAfterGame.displayWindowAfterGame("Endgame window", "You lose! Play again?");
             }
             if (!playerWin && !computerWin) {
-                windowAfterGame.displayWindowAfterGame("Endgame window", "Draw... Play again?");
+                WindowAfterGame.displayWindowAfterGame("Endgame window", "Draw... Play again?");
             }
         }
     }
@@ -128,13 +121,13 @@ public class Actions {
     public void runWindowAfterRound() {
         if (counterMove != 0) {
             if (playerWin) {
-                windowAfterRound.displayWindowAfterRound("Endround window", "You win round!");
+                WindowAfterRound.displayWindowAfterRound("End round window", "You win round!");
             }
             if (computerWin) {
-                windowAfterRound.displayWindowAfterRound("Endround window", "You lose round!");
+                WindowAfterRound.displayWindowAfterRound("End round window", "You lose round!");
             }
             if (!playerWin && !computerWin) {
-                windowAfterRound.displayWindowAfterRound("Endround window", "Draw...");
+                WindowAfterRound.displayWindowAfterRound("End round window", "Draw...");
             }
         }
     }
@@ -157,11 +150,12 @@ public class Actions {
         counterPlayerWin = 0;
         counterComputerWin = 0;
         newRound();
+        isNewGame = true;
     }
 
     public void endSetting() {
-        windowAfterGame.yesAnswer = false;
-        windowAfterGame.noAnswer = false;
+        WindowAfterGame.yesAnswer = false;
+        WindowAfterGame.noAnswer = false;
     }
 
     public int getCounterMove() {
@@ -180,4 +174,300 @@ public class Actions {
         return counterComputerWin;
     }
 
+    public void computerEasyModeMove() {
+        boolean end = false;
+        Random random = new Random();
+        while(!end && !WindowAfterGame.yesAnswer) {
+            Button button = buttonList.get(random.nextInt(buttonList.size()-1));
+            if (button.getText().equals("")) {
+                button.setText("O");
+                button.setStyle("-fx-font-size: 60");
+                button.setBackground(Background.fill(Color.DARKSALMON));
+                end = true;
+            }
+        }
+    }
+
+    public void computerMediumModeMove() {
+        if (buttonList.get(4).getText().equals("") && (buttonList.get(0).getText().equals("X") || buttonList.get(1).getText().equals("X")
+                || buttonList.get(2).getText().equals("X") || buttonList.get(3).getText().equals("X") || buttonList.get(5).getText().equals("X")
+                || buttonList.get(6).getText().equals("X") || buttonList.get(7).getText().equals("X") || buttonList.get(8).getText().equals("X"))) {
+            System.out.println("check");
+            Button button = buttonList.get(4);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(4).getText().equals("X") && buttonList.get(0).getText().equals("")) {
+            Button button = buttonList.get(0);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(4).getText().equals("X") && buttonList.get(2).getText().equals("")){
+            Button button = buttonList.get(2);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(4).getText().equals("X") && buttonList.get(6).getText().equals("")){
+            Button button = buttonList.get(6);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(4).getText().equals("X") && buttonList.get(8).getText().equals("")){
+            Button button = buttonList.get(8);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else {
+            computerEasyModeMove();
+        }
+    }
+
+    public void computerHardModeMove() {
+        //Moves provide to win computer
+        if (buttonList.get(0).getText().equals("O") && buttonList.get(2).getText().equals("O") && buttonList.get(1).getText().equals("")) {
+            Button button = buttonList.get(1);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(3).getText().equals("O") && buttonList.get(5).getText().equals("O") && buttonList.get(4).getText().equals("")) {
+            Button button = buttonList.get(4);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(6).getText().equals("O") && buttonList.get(8).getText().equals("O") && buttonList.get(7).getText().equals("")) {
+            Button button = buttonList.get(7);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(0).getText().equals("O") && buttonList.get(6).getText().equals("O") && buttonList.get(3).getText().equals("")) {
+            Button button = buttonList.get(3);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(1).getText().equals("O") && buttonList.get(7).getText().equals("O") && buttonList.get(4).getText().equals("")) {
+            Button button = buttonList.get(4);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(2).getText().equals("O") && buttonList.get(8).getText().equals("O") && buttonList.get(5).getText().equals("")) {
+            Button button = buttonList.get(5);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(0).getText().equals("O") && buttonList.get(8).getText().equals("O") && buttonList.get(4).getText().equals("")) {
+            Button button = buttonList.get(4);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(2).getText().equals("O") && buttonList.get(6).getText().equals("O") && buttonList.get(4).getText().equals("")) {
+            Button button = buttonList.get(4);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(0).getText().equals("O") && buttonList.get(1).getText().equals("O") && buttonList.get(2).getText().equals("")) {
+            Button button = buttonList.get(2);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(1).getText().equals("O") && buttonList.get(2).getText().equals("O") && buttonList.get(0).getText().equals("")) {
+            Button button = buttonList.get(0);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(3).getText().equals("O") && buttonList.get(4).getText().equals("O") && buttonList.get(5).getText().equals("")) {
+            Button button = buttonList.get(5);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(4).getText().equals("O") && buttonList.get(5).getText().equals("O") && buttonList.get(3).getText().equals("")) {
+            Button button = buttonList.get(3);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(6).getText().equals("O") && buttonList.get(7).getText().equals("O") && buttonList.get(8).getText().equals("")) {
+            Button button = buttonList.get(8);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(7).getText().equals("O") && buttonList.get(8).getText().equals("O") && buttonList.get(6).getText().equals("")) {
+            Button button = buttonList.get(6);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(0).getText().equals("O") && buttonList.get(3).getText().equals("O") && buttonList.get(6).getText().equals("")) {
+            Button button = buttonList.get(6);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(3).getText().equals("O") && buttonList.get(6).getText().equals("O") && buttonList.get(0).getText().equals("")) {
+            Button button = buttonList.get(0);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(1).getText().equals("O") && buttonList.get(4).getText().equals("O") && buttonList.get(7).getText().equals("")) {
+            Button button = buttonList.get(7);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(4).getText().equals("O") && buttonList.get(7).getText().equals("O") && buttonList.get(1).getText().equals("")) {
+            Button button = buttonList.get(1);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(2).getText().equals("O") && buttonList.get(5).getText().equals("O") && buttonList.get(8).getText().equals("")) {
+            Button button = buttonList.get(8);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(5).getText().equals("O") && buttonList.get(8).getText().equals("O") && buttonList.get(2).getText().equals("")) {
+            Button button = buttonList.get(2);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(0).getText().equals("O") && buttonList.get(4).getText().equals("O") && buttonList.get(8).getText().equals("")) {
+            Button button = buttonList.get(8);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(4).getText().equals("O") && buttonList.get(8).getText().equals("O") && buttonList.get(0).getText().equals("")) {
+            Button button = buttonList.get(0);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(2).getText().equals("O") && buttonList.get(4).getText().equals("O") && buttonList.get(6).getText().equals("")) {
+            Button button = buttonList.get(6);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(4).getText().equals("O") && buttonList.get(6).getText().equals("O") && buttonList.get(2).getText().equals("")) {
+            Button button = buttonList.get(2);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        }
+        // Moves against player
+        else if (buttonList.get(0).getText().equals("X") && buttonList.get(2).getText().equals("X") && buttonList.get(1).getText().equals("")){
+            Button button = buttonList.get(1);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(3).getText().equals("X") && buttonList.get(5).getText().equals("X") && buttonList.get(4).getText().equals("")) {
+            Button button = buttonList.get(4);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(6).getText().equals("X") && buttonList.get(8).getText().equals("X") && buttonList.get(7).getText().equals("")) {
+            Button button = buttonList.get(7);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(0).getText().equals("X") && buttonList.get(6).getText().equals("X") && buttonList.get(3).getText().equals("")) {
+            Button button = buttonList.get(3);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(1).getText().equals("X") && buttonList.get(7).getText().equals("X") && buttonList.get(4).getText().equals("")) {
+            Button button = buttonList.get(4);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(2).getText().equals("X") && buttonList.get(8).getText().equals("X") && buttonList.get(5).getText().equals("")) {
+            Button button = buttonList.get(5);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(0).getText().equals("X") && buttonList.get(8).getText().equals("X") && buttonList.get(4).getText().equals("")) {
+            Button button = buttonList.get(4);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(2).getText().equals("X") && buttonList.get(6).getText().equals("X") && buttonList.get(4).getText().equals("")) {
+            Button button = buttonList.get(4);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(0).getText().equals("X") && buttonList.get(1).getText().equals("X") && buttonList.get(2).getText().equals("")) {
+            Button button = buttonList.get(2);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(1).getText().equals("X") && buttonList.get(2).getText().equals("X") && buttonList.get(0).getText().equals("")) {
+            Button button = buttonList.get(0);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(3).getText().equals("X") && buttonList.get(4).getText().equals("X") && buttonList.get(5).getText().equals("")) {
+            Button button = buttonList.get(5);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(4).getText().equals("X") && buttonList.get(5).getText().equals("X") && buttonList.get(3).getText().equals("")) {
+            Button button = buttonList.get(3);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(6).getText().equals("X") && buttonList.get(7).getText().equals("X") && buttonList.get(8).getText().equals("")) {
+            Button button = buttonList.get(8);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(7).getText().equals("X") && buttonList.get(8).getText().equals("X") && buttonList.get(6).getText().equals("")) {
+            Button button = buttonList.get(6);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(0).getText().equals("X") && buttonList.get(3).getText().equals("X") && buttonList.get(6).getText().equals("")) {
+            Button button = buttonList.get(6);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(3).getText().equals("X") && buttonList.get(6).getText().equals("X") && buttonList.get(0).getText().equals("")) {
+            Button button = buttonList.get(0);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(1).getText().equals("X") && buttonList.get(4).getText().equals("X") && buttonList.get(7).getText().equals("")) {
+            Button button = buttonList.get(7);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(4).getText().equals("X") && buttonList.get(7).getText().equals("X") && buttonList.get(1).getText().equals("")) {
+            Button button = buttonList.get(1);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(2).getText().equals("X") && buttonList.get(5).getText().equals("X") && buttonList.get(8).getText().equals("")) {
+            Button button = buttonList.get(8);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(5).getText().equals("X") && buttonList.get(8).getText().equals("X") && buttonList.get(2).getText().equals("")) {
+            Button button = buttonList.get(2);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(0).getText().equals("X") && buttonList.get(4).getText().equals("X") && buttonList.get(8).getText().equals("")) {
+            Button button = buttonList.get(8);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(4).getText().equals("X") && buttonList.get(8).getText().equals("X") && buttonList.get(0).getText().equals("")) {
+            Button button = buttonList.get(0);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(2).getText().equals("X") && buttonList.get(4).getText().equals("X") && buttonList.get(6).getText().equals("")) {
+            Button button = buttonList.get(6);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else if (buttonList.get(4).getText().equals("X") && buttonList.get(6).getText().equals("X") && buttonList.get(2).getText().equals("")) {
+            Button button = buttonList.get(2);
+            button.setText("O");
+            button.setStyle("-fx-font-size: 60");
+            button.setBackground(Background.fill(Color.DARKSALMON));
+        } else {
+            computerMediumModeMove();
+        }
+    }
 }
